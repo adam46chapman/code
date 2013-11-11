@@ -1,0 +1,23 @@
+DataTable dt = new DataTable("myData");
+            FileInfo DataFile = new FileInfo(@"D:\Downloads\rankscsv.csv");
+
+            System.Data.OleDb.OleDbConnection MyConnection = new System.Data.OleDb.OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source='" + DataFile.Directory.FullName + "';Extended Properties='text;HDR=NO';Jet OLEDB:Engine Type=96;");
+            OleDbDataAdapter oledataAdapter = default(OleDbDataAdapter);
+            oledataAdapter = new OleDbDataAdapter("SELECT * FROM [" + DataFile.Name + "]", MyConnection);
+
+            oledataAdapter.Fill(dt);
+            //Bind the csv to the data table
+
+            //LOOP AND INSERT HERE...
+
+            foreach (DataRow DataRowObj in dt.Rows)
+            {
+                Rank rank = new Rank();
+                rank.Name = DataRowObj[0].ToString();
+                rank.Color = DataRowObj[1].ToString();
+                rank.FactionId = 1;
+                rank.Rate = DataRowObj[3].ToString();
+                rank.DisplayOrder = 0;
+                rank.Abbreviation = DataRowObj[5].ToString();
+                context.Ranks.AddOrUpdate(rank);
+            }     
